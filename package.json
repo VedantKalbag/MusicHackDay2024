@@ -11,6 +11,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.3",
+    "envalid": "6.0.0",
+    "form-data": "2.5.0",
+    "node-fetch": "2.6.1"
+  },
+  "devDependencies": {
+    "ngrok": "3.2.5"
   }
 }
