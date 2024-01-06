@@ -12,6 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@supabase/supabase-js": "^2.39.2",
+    "axios": "^1.6.5",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "envalid": "6.0.0",
     "express": "^4.18.2",
@@ -20,6 +22,7 @@
     "node-fetch": "2.6.1"
   },
   "devDependencies": {
+    "@gradio/client": "^0.10.0",
     "ngrok": "3.2.5"
   }
 }
