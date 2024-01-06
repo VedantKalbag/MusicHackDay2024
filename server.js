@@ -1,3 +1,13 @@
+const { createClient } = require("@supabase/supabase-js");
+const envalid = require("envalid");
+
+const { SUPABASE_KEY, SUPABASE_URL } = envalid.cleanEnv(process.env, {
+  SUPABASE_KEY: envalid.str(),
+  SUPABASE_URL: envalid.str(),
+});
+const supabaseUrl = SUPABASE_URL;
+const supabaseKey = SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const path = require("path");
@@ -52,6 +62,20 @@ app.post("/upload", function (req, res) {
         process.exitCode = 1;
       });
   });
+});
+
+app.get("/result/:id", async (req, res) => {
+  const { id } = req.params;
+  const { data, error } = await supabase
+    .from("results")
+    .select("*")
+    .eq("songid", id)
+    .single();
+  if (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
+  res.send(data);
 });
 
 app.listen(port, () => {

@@ -3,16 +3,45 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="index.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ACDx 2024</title>
+  <link rel="stylesheet" href="index.css">
+  <script>
+    let spotIds = [];
+  </script>
 </head>
 
 <body>
-  <h1>Results Id</h1>
-  <p>
-    <%= id %>
-  </p>
+  <h1>Similar Songs:</h1>
+  <div id="embeds">
+    <span id="loader"></span>
+  </div>
 </body>
+<!-- <button id="fetcher">Fetch</button> -->
+<script>
+  const fetcher = document.getElementById('fetcher');
+  const embeds = document.getElementById('embeds');
+  const loader = document.getElementById('loader');
+  const iframeIt = (sId) => `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${sId}?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+  setTimeout(() => {
+    fetch(`/result/<%= id %>`).then(res => res.json()).then(res => {
+      const { spotifyIds } = res;
+      if (!spotifyIds) return embeds.innerHTML = '<h1>Sorry, no results found</h1>';
+      const spotIds = JSON.parse(spotifyIds).slice(0, 3);
+      const allEmbeds = spotIds.map(sId => iframeIt(sId)).join('');
+      loader.style.display = 'none';
+      embeds.innerHTML = allEmbeds;
+    });
+  }, 10000);
+  fetcher.onclick = () => {
+    console.log('clicked');
+    fetch(`/result/<%= id %>`).then(res => res.json()).then(res => {
+      const { spotifyIds } = res;
+      const spotIds = JSON.parse(spotifyIds).slice(0, 3);
+      const allEmbeds = spotIds.map(sId => iframeIt(sId)).join('');
+      embeds.innerHTML = allEmbeds;
+    });
+  };
+</script>
 
 </html>

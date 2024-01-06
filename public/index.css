@@ -1,3 +1,7 @@
+h1 {
+  font-weight: lighter;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
@@ -64,4 +68,35 @@ body {
     color: #fff;
     border-radius: 5px;
     border: none;
+    cursor: pointer;
   }
+
+  #embeds {
+    height: 500px;
+  }
+
+  #loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: #3498db;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 
+
+.title {
+  padding-bottom: 5px;
+  border-bottom: 1px dashed #fff;
+  letter-spacing: 8px;
+}
