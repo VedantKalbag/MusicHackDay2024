@@ -9,5 +9,8 @@ Inspira is a tool for songwriters that helps get past their writer's block. It l
 
 ## What's under the hood
 
-Input - Audio file (.mp3)
-Ouput - A list of UI embedded audio streams 
+Input  - Audio file (.mp3)
+Output - A list of UI embedded audio streams 
+
+
+
