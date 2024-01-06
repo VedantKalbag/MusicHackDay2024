@@ -1,5 +1,5 @@
-const { createClient } = require("@supabase/supabase-js");
-const envalid = require("envalid");
+// const { createClient } = require("@supabase/supabase-js");
+// const envalid = require("envalid");
 
 const { SUPABASE_KEY, SUPABASE_URL } = envalid.cleanEnv(process.env, {
   SUPABASE_KEY: envalid.str(),
@@ -8,15 +8,128 @@ const { SUPABASE_KEY, SUPABASE_URL } = envalid.cleanEnv(process.env, {
 const supabaseUrl = SUPABASE_URL;
 const supabaseKey = SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-require("dotenv").config();
-// const { client } = require("@gradio");
-const express = require("express");
-const axios = require("axios");
-const fileUpload = require("express-fileupload");
-const path = require("path");
+// require("dotenv").config();
+// const client = require("@gradio/client");
+// const express = require("express");
+// const axios = require("axios");
+// const fileUpload = require("express-fileupload");
+
+// convert all the requires to imports
+import envalid from "envalid";
+import express from "express";
+import axios from "axios";
+import fileUpload from "express-fileupload";
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
+// import app from "./src/app";
+// import fileUploader from "./src/file-upload";
+import { createClient } from "@supabase/supabase-js";
+import { client } from "@gradio/client";
+import fetch from "node-fetch";
+import fs from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const { API_URL, ACCESS_TOKEN } = envalid.cleanEnv(process.env, {
+  API_URL: envalid.str(),
+  ACCESS_TOKEN: envalid.str(),
+});
+
+const fileUploadRequestMutation = /* GraphQL */ `
+  mutation fileUploadRequest {
+    fileUploadRequest {
+      id
+      uploadUrl
+    }
+  }
+`;
+
+const libraryTrackCreateMutation = /* GraphQL */ `
+  mutation LibraryTrackCreate($input: LibraryTrackCreateInput!) {
+    libraryTrackCreate(input: $input) {
+      ... on LibraryTrackCreateError {
+        message
+      }
+      ... on LibraryTrackCreateSuccess {
+        createdLibraryTrack {
+          __typename
+          id
+        }
+      }
+    }
+  }
+`;
+
+const requestFileUpload = async () => {
+  const result = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      query: fileUploadRequestMutation,
+    }),
+    headers: {
+      Authorization: "Bearer " + ACCESS_TOKEN,
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
+
+  console.log("[info] fileUploadRequest response: ");
+  console.log(JSON.stringify(result, undefined, 2));
+
+  return result.data.fileUploadRequest;
+};
+
+const uploadFile = async (filePath, uploadUrl) => {
+  const result = await fetch(uploadUrl, {
+    method: "PUT",
+    body: fs.createReadStream(filePath),
+    headers: {
+      "Content-Length": fs.statSync(filePath).size,
+    },
+  }).then((res) => res);
+  console.log(result);
+};
+
+const libraryTrackCreate = async (fileUploadRequestId) => {
+  const result = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      query: libraryTrackCreateMutation,
+      variables: {
+        input: {
+          title: "My first libraryTrackCreate 3",
+          uploadId: fileUploadRequestId,
+        },
+      },
+    }),
+    headers: {
+      Authorization: "Bearer " + ACCESS_TOKEN,
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json());
+
+  console.log("[info] libraryTrackCreate response: ");
+  console.log(JSON.stringify(result, undefined, 2));
+
+  return result.data.libraryTrackCreate;
+};
+
+const fileUploader = async (filePath) => {
+  console.log("[info] request file upload");
+  const { id, uploadUrl } = await requestFileUpload(filePath);
+  console.log(uploadUrl);
+
+  console.log("[info] upload file");
+  await uploadFile(filePath, uploadUrl);
+  console.log("[info] create InDepthAnalysis");
+  const { createdLibraryTrack } = await libraryTrackCreate(id);
+  return createdLibraryTrack.id || "";
+};
+
+// const path = require("path");
 const app = express();
 const port = 3000;
-const fileUploader = require("./src/file-upload");
+// const fileUploader = require("./src/file-upload");
 
 app.use(express.static("public"));
 
@@ -49,34 +162,34 @@ app.set("view engine", "ejs");
 //   }
 // });
 
-// app.get("/generate", async function (req, res) {
-//   let input_path = '../resources/rithesh.wav';
-//   let prompt = "Energetic funk pop song with only beats and lead instrument";
+app.get("/generate", async function (req, res) {
+  let input_path = "../resources/rithesh.wav";
+  let prompt = "Energetic funk pop song with only beats and lead instrument";
 
-//   try {
-//     // Make a GET request to the "/generate" endpoint
-//     const response = await axios.get('http://127.0.0.1:8000/generate', {
-//       // Add query parameters
-//       params: {
-//         input_path: input_path,
-//         prompt: prompt,
-//       }
-//     });
+  try {
+    // Make a GET request to the "/generate" endpoint
+    const response = await axios.get("http://127.0.0.1:8000/generate", {
+      // Add query parameters
+      params: {
+        input_path: input_path,
+        prompt: prompt,
+      },
+    });
 
-//     // Assuming the URL is in the response data
-//     const generatedUrl = response.data.url;
+    // Assuming the URL is in the response data
+    const generatedUrl = response.data.url;
 
-//     // Do something with the generated URL
-//     console.log('Generated URL:', generatedUrl);
+    // Do something with the generated URL
+    console.log("Generated URL:", generatedUrl);
 
-//     // Respond to the client if needed
-//     res.status(200).json({ success: true, url: generatedUrl });
-//   } catch (error) {
-//     // Handle any errors that occurred during the request
-//     console.error('Error:', error.message);
-//     res.status(500).json({ success: false, error: error.message });
-//   }
-// });
+    // Respond to the client if needed
+    res.status(200).json({ success: true, url: generatedUrl });
+  } catch (error) {
+    // Handle any errors that occurred during the request
+    console.error("Error:", error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // app.get("/generate", async function (req, res) {
 //   async function run() {
@@ -108,6 +221,7 @@ app.post("/upload", function (req, res) {
 
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
   sampleFile = req.files.sampleFile;
+  console.log("dir: ", __dirname);
   uploadPath = __dirname + "/uploads/" + sampleFile.name;
 
   // Use the mv() method to place the file somewhere on your server

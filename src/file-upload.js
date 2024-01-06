@@ -1,8 +1,12 @@
-"use strict";
+// "use strict";
 
-const envalid = require("envalid");
-const fs = require("fs");
-const fetch = require("node-fetch");
+// const envalid = require("envalid");
+// const fs = require("fs");
+// const fetch = require("node-fetch");
+// conver above to imports
+import envalid from "envalid";
+import fs from "fs";
+import fetch from "node-fetch";
 
 const { API_URL, ACCESS_TOKEN } = envalid.cleanEnv(process.env, {
   API_URL: envalid.str(),
@@ -104,4 +108,9 @@ const fileUploader = async (filePath) => {
 //   process.exitCode = 1;
 // });
 
-module.exports = fileUploader;
+// module.exports = {
+//   fileUploader: fileUploader,
+//   default: fileUploader,
+// };
+
+export { fileUploader };
