@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const { createClient } = require("@supabase/supabase-js");
 const envalid = require("envalid");
 
@@ -9,12 +8,10 @@ const { SUPABASE_KEY, SUPABASE_URL } = envalid.cleanEnv(process.env, {
 const supabaseUrl = SUPABASE_URL;
 const supabaseKey = SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
-=======
-require('dotenv').config();
-const {client} = require("@gradio");
->>>>>>> e6b0c0f1a2e25a2ae27141c25850e2cec088cc6b
+require("dotenv").config();
+// const { client } = require("@gradio");
 const express = require("express");
-const axios = require('axios');
+const axios = require("axios");
 const fileUpload = require("express-fileupload");
 const path = require("path");
 const app = express();
@@ -43,14 +40,14 @@ app.set("view engine", "ejs");
 //   });
 // });
 
-app.post("/upload", function (req, res) {
-  let sampleFile;
-  let uploadPath;
+// app.post("/upload", function (req, res) {
+//   let sampleFile;
+//   let uploadPath;
 
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send("No files were uploaded.");
-  }
-});
+//   if (!req.files || Object.keys(req.files).length === 0) {
+//     return res.status(400).send("No files were uploaded.");
+//   }
+// });
 
 // app.get("/generate", async function (req, res) {
 //   let input_path = '../resources/rithesh.wav';
@@ -81,30 +78,25 @@ app.post("/upload", function (req, res) {
 //   }
 // });
 
+// app.get("/generate", async function (req, res) {
+//   async function run() {
+//     let input_path = "../resources/rithesh.wav";
+//     let prompt = "Energetic funk pop song with only beats and lead instrument";
 
+//     const response_0 = await fetch(input_path);
+//     const exampleAudio = await response_0.blob();
 
-app.get("/generate", async function (req, res) {
-  async function run() {
+//     const app = await client("https://facebook-musicgen.hf.space/");
+//     const result = await app.predict(0, [
+//       "Howdy!", // string  in 'Describe your music' Textbox component
+//       exampleAudio, // blob in 'File' Audio component
+//     ]);
 
-   let input_path = '../resources/rithesh.wav';
-   let prompt = "Energetic funk pop song with only beats and lead instrument";
-
-    const response_0 = await fetch(input_path);
-    const exampleAudio = await response_0.blob();
-              
-    const app = await client("https://facebook-musicgen.hf.space/");
-    const result = await app.predict(0, [		
-          "Howdy!", // string  in 'Describe your music' Textbox component
-          exampleAudio, 	// blob in 'File' Audio component
-    ]);
-  
-    console.log(result.data);
-  }
-});
+//     console.log(result.data);
+//   }
+// });
 
 //run();
-
-
 
 app.post("/upload", function (req, res) {
   let sampleFile;
@@ -152,6 +144,5 @@ app.get("/result/:id", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`)
+  console.log(`Server listening at http://localhost:${port}`);
 });
-
