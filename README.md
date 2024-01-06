@@ -4,7 +4,7 @@ Inspira is a tool for songwriters that helps get past their writer's block. It l
 
 ## How to use
 1. Upload your roughly **produced** track on to GUI
-2. UI populates 5 similar audio streams (2 generated & 3 released music)
+2. You will be shown a few tracks that have already been released, that are similar to your sound, as well as a few AI generated samples for your inspiration
 3. Get inspired!
 
 ## What's under the hood
@@ -18,7 +18,7 @@ Output - A list of UI embedded audio streams <br>
 ### Process Flow
 1. User inputs a multi-instrumental mp3 file with vocal lead (w/o vocals is ok too)
 2. They also enter a text prompt describing their track
-3. The prompt and audio file is fed to Facebook's musicGen to generate a 15sec multi-instument song
+3. The prompt and audio file is fed to Facebook's MusicGen to generate a 15sec multi-instument song
 4. The audio file is also fed to Cyanite AI to populate similarity matches. Top 3 matches are sent back to the UI
 5. 3 
 
