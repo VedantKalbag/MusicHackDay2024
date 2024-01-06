@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ACDx 2024</title>
+  <title>INSPIRA</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🎵</text></svg>">
   <link rel="stylesheet" href="index.css">
   <script>
     let spotIds = [];
@@ -12,7 +14,7 @@
 </head>
 
 <body>
-  <h1>Similar Songs:</h1>
+  <h1 id="similar_title">Searching Database:</h1>
   <div id="embeds">
     <span id="loader"></span>
   </div>
@@ -22,22 +24,28 @@
   const fetcher = document.getElementById('fetcher');
   const embeds = document.getElementById('embeds');
   const loader = document.getElementById('loader');
-  const iframeIt = (sId) => `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${sId}?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+  const similar_title = document.getElementById('similar_title');
+  const iframeIt = (sId) => `<div class="spot_embed"><iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${sId}?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe></div>`;
   setTimeout(() => {
     fetch(`/result/<%= id %>`).then(res => res.json()).then(res => {
       const { spotifyIds } = res;
-      if (!spotifyIds) return embeds.innerHTML = '<h1>Sorry, no results found</h1>';
+      if (!spotifyIds) {
+        similar_title.innerHTML = 'Uh oh!';
+        return embeds.innerHTML = '<h1>Sorry, no results found</h1>';
+      }
       const spotIds = JSON.parse(spotifyIds).slice(0, 3);
       const allEmbeds = spotIds.map(sId => iframeIt(sId)).join('');
       loader.style.display = 'none';
+      similar_title.innerHTML = 'Similar Songs:';
       embeds.innerHTML = allEmbeds;
+
     });
   }, 10000);
   fetcher.onclick = () => {
     console.log('clicked');
     fetch(`/result/<%= id %>`).then(res => res.json()).then(res => {
       const { spotifyIds } = res;
-      const spotIds = JSON.parse(spotifyIds).slice(0, 3);
+      const spotIds = JSON.parse(spotifyIds).slice(0, 5);
       const allEmbeds = spotIds.map(sId => iframeIt(sId)).join('');
       embeds.innerHTML = allEmbeds;
     });

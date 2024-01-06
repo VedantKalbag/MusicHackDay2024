@@ -5,12 +5,15 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="index.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audio Generator</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🎵</text></svg>">
+  <title>INSPIRA</title>
 </head>
 
 <body>
-  <h1 class="title">InspiroJam</h1>
+  <h1 class="title">INSPIRA</h1>
   <input type="file" name="song" id="fileInput" accept="audio/*" style="display: none">
+  <input type="text" name="sampleFile" class="text_upload" placeholder="Describe the vibe of your melody..." />
   <form ref='uploadForm' id='uploadForm' action='http://localhost:3000/upload' method='post'
     encType="multipart/form-data">
     <input type="file" name="sampleFile" class="uploader" />
