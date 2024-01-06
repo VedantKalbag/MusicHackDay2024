@@ -12,13 +12,13 @@
   <input type="file" name="song" id="fileInput" accept="audio/*" style="display: none">
   <form ref='uploadForm' id='uploadForm' action='http://localhost:3000/upload' method='post'
     encType="multipart/form-data">
-    <input type="file" name="sampleFile" />
-    <input type='submit' value='Upload!' />
+    <input type="file" name="sampleFile" class="uploader" />
+    <input type='submit' value='Upload' class="upload-btn" />
   </form>
   <!-- <button id="uploadButton">Upload File</button> -->
-  <button id="startRecordingButton">Start Recording</button>
+  <!-- <button id="startRecordingButton">Start Recording</button>
   <button id="stopRecordingButton" disabled>Stop Recording</button>
-  <audio id="audioPlayer" controls></audio>
+  <audio id="audioPlayer" controls></audio> -->
 
   <script src="main.js"></script>
 </body>

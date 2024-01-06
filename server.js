@@ -14,6 +14,15 @@ app.get("/", (req, res) => {
 // default options
 app.use(fileUpload());
 
+// set the view engine to ejs
+app.set("view engine", "ejs");
+
+// app.get("/res", (req, res) => {
+//   res.render("result", {
+//     id: "someid",
+//   });
+// });
+
 app.post("/upload", function (req, res) {
   let sampleFile;
   let uploadPath;
@@ -31,11 +40,17 @@ app.post("/upload", function (req, res) {
     console.log({ err });
     if (err) return res.status(500).send(err);
 
-    fileUploader(uploadPath).catch((err) => {
-      console.error(err);
-      process.exitCode = 1;
-    });
-    res.send("File uploaded!");
+    fileUploader(uploadPath)
+      .then((id) => {
+        // res.send(`File uploaded with id: ${id}!`);
+        res.render("result", {
+          id,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        process.exitCode = 1;
+      });
   });
 });
 

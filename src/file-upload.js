@@ -95,7 +95,8 @@ const fileUploader = async (filePath) => {
   console.log("[info] upload file");
   await uploadFile(filePath, uploadUrl);
   console.log("[info] create InDepthAnalysis");
-  await libraryTrackCreate(id);
+  const { createdLibraryTrack } = await libraryTrackCreate(id);
+  return createdLibraryTrack?.id || "";
 };
 
 // main(process.argv[2]).catch((err) => {
